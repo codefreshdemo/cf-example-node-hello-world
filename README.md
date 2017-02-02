@@ -1,90 +1,79 @@
-Build status: [![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=containers101&repoName=demochat&branch=master&pipelineName=demochatdfdf&accountName=Razielt77_github&type=cf-1)]( https://g.codefresh.io/repositories/containers101/demochat/builds?filter=trigger:build;branch:master;service:58543cb490a3f40100db408f~demochatdfdf)
+# Welcome
 
-![Let's Chat Greylock](http://i.imgur.com/0a3l5VF.png)
-![Screenshot](http://i.imgur.com/C4uMD67.png)
-A self-hosted chat app for small teams or big Gal by [Security Compass][seccom].
+So, you've decided to try Codefresh? Welcome on board!
 
+Using this repository we'll help you get up to speed with basic functionality such as: *compiling*, *testing* and *building Docker images*.
 
+This project uses `Node.js` to build an application which will eventually become a distributable Docker image.
 
-## Features and Stuff
+## Looking around
 
-* BYOS (bring your own server)
-* Persistent messages
-* Multiple rooms
-* Private and password-protected rooms
-* New message alerts / notifications
-* Mentions (hey @you/@all)
-* Image embeds / Giphy search
-* Code pasting
-* File uploads (Local / [Amazon S3][s3] / [Azure][azure])
-* Transcripts / Chat History (with search)
-* XMPP Multi-user chat (MUC)
-* 1-to-1 chat between XMPP users
-* Local / [Kerberos][kerberos] / [LDAP][ldap] authentication
-* [Hubot Adapter][hubot]
-* REST-like API
-* Basic i18n support
-* MIT Licensed
+In the root of this repository you'll find a file named `codefresh.yml`, this is our https://docs.codefresh.io/docs/what-is-the-codefresh-yaml[build descriptor] and it describes the different steps that comprise our process.
+Let's quickly review the contents of this file:
 
+### Compiling and testing
 
-## Deployment 
+To compile and test our code we use Codefresh's https://docs.codefresh.io/docs/steps#section-freestyle[Freestyle step].
 
-For installation instructions, please use the following links:
+The Freestyle step basically let's you say "Hey, Codefresh! Here's a Docker image. Create a new container and run these commands for me, will ya?"
 
-* [Local installation][install-local]
-* [Docker][install-docker]
-* [Heroku][install-heroku]
-* [Vagrant][install-vagrant]
+```
+     unit_tests:
+          title: Unit Tests
+          image: ${{build_step}}
+          fail_fast: false
+          commands:
+            - npm test
+```
 
-## Support & Problems
+The `image` field states which image should be used when creating the container (Similar to Travis CI's `language` or circleci`s `machine`).
 
-We have a [troubleshooting document][troubleshooting], otherwise please use our
-[mailing list][mailing-list] for support issues and questions.
+The `commands` field is how you specify all the commands that you'd like to execute
 
+### Building
 
-## Bugs and feature requests
+To bake our application into a Docker image we use Codefresh's https://docs.codefresh.io/docs/steps#section-build[Build step].
 
-Have a bug or a feature request? Please first read the [issue
-guidelines][contributing] and search for existing and closed issues. If your
-problem or idea is not addressed yet, [please open a new issue][new-issue].
+The Build is a simplified abstraction over the Docker build command.
 
+```
+     build_step:
+         title: Build
+         type: build
+         dockerfile: Dockerfile
+         image_name: codefresh/demochat
+```
 
-## Documentation
+Use the `image_name` field to declare the name of the resulting image (don't forget to change the image owner name from `codefreshdemo` to your own!).
 
-Let's Chat documentation is hosted in the [wiki]. If there is an inaccuracy in
-the documentation, [please open a new issue][new-issue].
+### Launching
 
+This is where it gets real! Let's use Codefresh's https://docs.codefresh.io/docs/steps#section-launch-composition[Launch Composition step] to run our composition within Codefresh!
 
-## Contributing
+Launching compositions within Codefresh means you have your very own staging area, at a click of a button!
+```
+     launch_composition:
+       title: Launch Composition
+       type: launch-composition
+       composition: docker-compose.yml
+       environment_name: 'node hello world'
+       entry_point: web
+```
 
-Please read through our [contributing guidelines][contributing]. Included are
-directions for opening issues, coding standards, and notes on development.
+Using the `composition` field, we direct Codefresh to the location if the `docker-compose` file in our repository.
 
-Editor preferences are available in the [editor config][editorconfig] for easy
-use in common text editors. Read more and download plugins at
-<http://editorconfig.org>.
+Once the Launch Composition step has completed successfully, you'll be able to review and share your running composition in the https://docs.codefresh.io/docs/share-environment-with-your-test[Environments page].
 
+Now that we've gotten a grip on the flow, let's get cracking!
 
-## License
+## Using This Example
 
-Released under [the MIT license][license].
+To use this example:
 
-
-[wiki]: https://github.com/sdelements/lets-chat/wiki
-[troubleshooting]: https://github.com/sdelements/lets-chat/blob/master/TROUBLESHOOTING.md
-[mailing-list]: https://groups.google.com/forum/#!forum/lets-chat-app
-[tracker]: https://github.com/sdelements/lets-chat/issues
-[contributing]: https://github.com/sdelements/lets-chat/blob/master/CONTRIBUTING.md
-[new-issue]: https://github.com/sdelements/lets-chat/issues/new
-[editorconfig]: https://github.com/sdelements/lets-chat/blob/master/.editorconfig
-[license]: https://github.com/sdelements/lets-chat/blob/master/LICENSE
-[ldap]: https://github.com/sdelements/lets-chat-ldap
-[kerberos]: https://github.com/sdelements/lets-chat-kerberos
-[s3]: https://github.com/sdelements/lets-chat-s3
-[seccom]: http://securitycompass.com/
-[hubot]: https://github.com/sdelements/hubot-lets-chat
-[azure]: https://github.com/maximilian-krauss/lets-chat-azure
-[install-local]: https://github.com/sdelements/lets-chat/wiki/Installation
-[install-docker]: https://registry.hub.docker.com/u/sdelements/lets-chat/
-[install-heroku]: https://github.com/sdelements/lets-chat/wiki/Heroku
-[install-vagrant]: https://github.com/sdelements/lets-chat/wiki/Vagrant
+. Fork this repository to your own [INSERT_SCM_SYSTEM (git, bitbucket)] account.
+. Log in to Codefresh using your [INSERT_SCM_SYSTEM (git, bitbucket)] account.
+. Click the `Add Service` button.
+. Select the forked repository.
+. Select the `I have a Codefresh.yml file` option.
+. Complete the wizard.
+. Rejoice!

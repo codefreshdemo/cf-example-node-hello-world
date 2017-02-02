@@ -5,8 +5,8 @@ steps:
      unit_tests:
           title: Unit Tests
           image: node:6.9.2
-          fail_fast: false
           commands:
+            - npm install
             - npm test
 
      build_step:

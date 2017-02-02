@@ -4,7 +4,7 @@ steps:
 
      unit_tests:
           title: Unit Tests
-          image: ${{build_step}}
+          image: node:6.9.2
           fail_fast: false
           commands:
             - npm test

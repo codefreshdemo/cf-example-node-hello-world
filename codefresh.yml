@@ -6,7 +6,7 @@ steps:
           title: Unit Tests
           image: node:6.9.2
           commands:
-            - npm install
+            - npm install --silence
             - npm test
 
      build_step:

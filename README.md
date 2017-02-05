@@ -8,12 +8,12 @@ This project uses `Node.js` to build an application which will eventually become
 
 ## Looking around
 
-In the root of this repository you'll find a file named `codefresh.yml`, this is our [build descriptor]https://docs.codefresh.io/docs/what-is-the-codefresh-yaml and it describes the different steps that comprise our process.
+In the root of this repository you'll find a file named `codefresh.yml`, this is our [build descriptor](https://docs.codefresh.io/docs/what-is-the-codefresh-yaml) and it describes the different steps that comprise our process.
 Let's quickly review the contents of this file:
 
 ### Compiling and testing
 
-To compile and test our code we use Codefresh's [Freestyle step]https://docs.codefresh.io/docs/steps#section-freestyle.
+To compile and test our code we use Codefresh's [Freestyle step](https://docs.codefresh.io/docs/steps#section-freestyle).
 
 The Freestyle step basically let's you say "Hey, Codefresh! Here's a Docker image. Create a new container and run these commands for me, will ya?"
 
@@ -32,7 +32,7 @@ The `commands` field is how you specify all the commands that you'd like to exec
 
 ### Building
 
-To bake our application into a Docker image we use Codefresh's [Build step]https://docs.codefresh.io/docs/steps#section-build.
+To bake our application into a Docker image we use Codefresh's [Build step](https://docs.codefresh.io/docs/steps#section-build).
 
 The Build is a simplified abstraction over the Docker build command.
 
@@ -48,7 +48,7 @@ Use the `image_name` field to declare the name of the resulting image (don't for
 
 ### Launching
 
-This is where it gets real! Let's use Codefresh's [Launch Composition step]https://docs.codefresh.io/docs/steps#section-launch-composition to run our composition within Codefresh!
+This is where it gets real! Let's use Codefresh's [Launch Composition step](https://docs.codefresh.io/docs/steps#section-launch-composition) to run our composition within Codefresh!
 
 Launching compositions within Codefresh means you have your very own staging area, at a click of a button!
 ```
@@ -62,7 +62,7 @@ Launching compositions within Codefresh means you have your very own staging are
 
 Using the `composition` field, we direct Codefresh to the location if the `docker-compose` file in our repository.
 
-Once the Launch Composition step has completed successfully, you'll be able to review and share your running composition in the [Environments page]https://docs.codefresh.io/docs/share-environment-with-your-test.
+Once the Launch Composition step has completed successfully, you'll be able to review and share your running composition in the [Environments page](https://docs.codefresh.io/docs/share-environment-with-your-test).
 
 Now that we've gotten a grip on the flow, let's get cracking!
 
